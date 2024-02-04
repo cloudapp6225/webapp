@@ -94,7 +94,8 @@ public class UserService implements UserServiceInterface{
     }
 
     public boolean isValidEmail(String email) {
-
+        String regex = "^[A-Za-z0-9+_.-]+@[A-Za-z0-9.-]+\\.[A-Za-z]{2,}$";
+        return email.matches(regex);
     }
 
 }

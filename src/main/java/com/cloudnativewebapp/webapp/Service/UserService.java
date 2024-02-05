@@ -3,6 +3,7 @@ package com.cloudnativewebapp.webapp.Service;
 import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
 import com.cloudnativewebapp.webapp.Exception.DatabaseException;
+import com.cloudnativewebapp.webapp.Exception.InvalidEmailAddressException;
 import com.cloudnativewebapp.webapp.Exception.UserAlreadyExistsException;
 import com.cloudnativewebapp.webapp.Exception.UserNotFoundException;
 import com.cloudnativewebapp.webapp.Repository.UserRepository;
@@ -20,8 +21,6 @@ import static com.cloudnativewebapp.webapp.SpringConfig.AppConfig.passwordEncode
 @Service
 public class UserService implements UserServiceInterface{
 
-    private static final String regex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$";
-
     @Autowired
     private UserRepository userRepository;
 
@@ -29,9 +28,13 @@ public class UserService implements UserServiceInterface{
     private ModelMapper modelMapper;
 
     @Override
-    public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException {
+    public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException {
         if(userRepository.findByUsername(user.getUsername()) != null) {
             throw new UserAlreadyExistsException("User already exists");
+        }
+
+        if(!isValidEmail(user.getUsername())) {
+            throw new InvalidEmailAddressException("Invalid Email Address");
         }
 
         User newUser = User.builder()

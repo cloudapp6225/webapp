@@ -35,5 +35,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(msg);
     }
 
+    @ExceptionHandler(InvalidEmailAddressException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleInvalidEmailException(InvalidEmailAddressException ex) {
+        ExceptionResponseDTO msg = new ExceptionResponseDTO(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
+    }
+
 
 }

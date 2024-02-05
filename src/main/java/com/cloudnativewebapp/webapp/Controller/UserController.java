@@ -4,6 +4,7 @@ package com.cloudnativewebapp.webapp.Controller;
 import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
 import com.cloudnativewebapp.webapp.Exception.DatabaseException;
+import com.cloudnativewebapp.webapp.Exception.InvalidEmailAddressException;
 import com.cloudnativewebapp.webapp.Exception.UserAlreadyExistsException;
 import com.cloudnativewebapp.webapp.Exception.UserNotFoundException;
 import com.cloudnativewebapp.webapp.Service.UserServiceInterface;
@@ -21,7 +22,7 @@ public class UserController {
     private UserServiceInterface userService;
 
     @PostMapping("/v1/user")
-    public ResponseEntity<UserDTO> createUserRequest(@Valid @RequestBody User user) throws UserAlreadyExistsException, DatabaseException {
+    public ResponseEntity<UserDTO> createUserRequest(@Valid @RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException {
         UserDTO userDTO = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }

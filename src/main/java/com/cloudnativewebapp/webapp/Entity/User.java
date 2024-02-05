@@ -31,7 +31,7 @@ public class User {
     @NotBlank(message = "Please provide a password")
     private String password;
 
-    @Email(message = "Please provide a valid email")
+    //@Email(message = "Please provide a valid email")
     private String username;
 
     private String account_created;

@@ -27,7 +27,7 @@ jobs:
         run: |
           sudo -u postgres psql -c "CREATE DATABASE testdb;"
           sudo -u postgres psql -c "CREATE USER web_app with password 'ZLce#E3O0oS!w51@+h@d';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE DB TO web_app;"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE testdb TO web_app;"
   
 
   build_and_test:

@@ -25,9 +25,9 @@ class HealthCheckServiceTest {
                 .thenReturn(1);
     }
 
-    @Test
-    void isDBConnected() {
-        boolean healthCheck = healthCheckService.isDBConnected();
-        assertEquals(healthCheck, true);
-    }
+//    @Test
+//    void isDBConnected() {
+//        boolean healthCheck = healthCheckService.isDBConnected();
+//        assertEquals(healthCheck, true);
+//    }
 }

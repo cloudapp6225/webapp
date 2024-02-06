@@ -19,16 +19,6 @@ jobs:
         run: |
           sudo apt install -y postgresql postgresql-contrib
 
-      - name: Run postgresql server
-        run: |
-          sudo service postgresql start
-
-      - name: Set up database and create user for application
-        run: |
-          sudo -u postgres psql -c "CREATE DATABASE testdb;"
-          sudo -u postgres psql -c "CREATE USER web_app with password 'ZLce#E3O0oS!w51@+h@d';"
-          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE testdb TO web_app;"
-  
 
   build_and_test:
     runs-on: ubuntu-latest
@@ -45,10 +35,19 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Run postgresql server
+        run: |
+          sudo service postgresql start
+
+      - name: Set up database and create user for application
+        run: |
+          sudo -u postgres psql -c "CREATE DATABASE testdb;"
+          sudo -u postgres psql -c "CREATE USER web_app with password 'ZLce#E3O0oS!w51@+h@d';"
+          sudo -u postgres psql -c "GRANT ALL PRIVILEGES ON DATABASE testdb TO web_app;"
+
+
       - name: Build and Test Spring boot Application
         run: |
-          psql --version
-          sudo service postgresql start
           pg_isready
           mvn -version
           mvn clean install

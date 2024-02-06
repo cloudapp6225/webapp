@@ -2,10 +2,7 @@ package com.cloudnativewebapp.webapp.Service;
 
 import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
-import com.cloudnativewebapp.webapp.Exception.DatabaseException;
-import com.cloudnativewebapp.webapp.Exception.InvalidEmailAddressException;
-import com.cloudnativewebapp.webapp.Exception.UserAlreadyExistsException;
-import com.cloudnativewebapp.webapp.Exception.UserNotFoundException;
+import com.cloudnativewebapp.webapp.Exception.*;
 import com.cloudnativewebapp.webapp.Repository.UserRepository;
 import org.hibernate.exception.DataException;
 import org.modelmapper.ModelMapper;
@@ -28,7 +25,14 @@ public class UserService implements UserServiceInterface{
     private ModelMapper modelMapper;
 
     @Override
-    public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException {
+    public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException {
+        if(user.getUsername() == null
+                || user.getFirst_name() == null
+                || user.getLast_name() == null
+                || user.getPassword() == null) {
+            throw new InvalidUserInputException("The fields username, first_name, last_name, password are required");
+        }
+
         if(userRepository.findByUsername(user.getUsername()) != null) {
             throw new UserAlreadyExistsException("User already exists");
         }
@@ -79,9 +83,13 @@ public class UserService implements UserServiceInterface{
     public UserDTO updateUser(User updateUser, String userName) throws UserNotFoundException, DatabaseException {
         User getUserFromDB = userRepository.findByUsername(userName);
         if(getUserFromDB != null) {
-            getUserFromDB.setFirst_name(updateUser.getFirst_name());
-            getUserFromDB.setLast_name(updateUser.getLast_name());
-            getUserFromDB.setPassword(passwordEncoder().encode(updateUser.getPassword()));
+            if(updateUser.getFirst_name() != null)
+                getUserFromDB.setFirst_name(updateUser.getFirst_name());
+            if(updateUser.getLast_name() != null)
+                getUserFromDB.setLast_name(updateUser.getLast_name());
+            if(updateUser.getPassword() != null)
+                getUserFromDB.setPassword(passwordEncoder().encode(updateUser.getPassword()));
+
             getUserFromDB.setAccount_updated(String.valueOf(LocalDateTime.now()));
             try {
                 User updatedUser = userRepository.save(getUserFromDB);

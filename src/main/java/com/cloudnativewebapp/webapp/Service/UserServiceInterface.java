@@ -2,13 +2,10 @@ package com.cloudnativewebapp.webapp.Service;
 
 import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
-import com.cloudnativewebapp.webapp.Exception.DatabaseException;
-import com.cloudnativewebapp.webapp.Exception.InvalidEmailAddressException;
-import com.cloudnativewebapp.webapp.Exception.UserAlreadyExistsException;
-import com.cloudnativewebapp.webapp.Exception.UserNotFoundException;
+import com.cloudnativewebapp.webapp.Exception.*;
 
 public interface UserServiceInterface {
-    public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException;
+    public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException;
 
     public UserDTO getUser(String userId) throws UserNotFoundException;
 

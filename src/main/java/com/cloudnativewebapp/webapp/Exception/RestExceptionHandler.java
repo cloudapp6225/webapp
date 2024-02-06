@@ -41,5 +41,11 @@ public class RestExceptionHandler extends ResponseEntityExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
     }
 
+    @ExceptionHandler(InvalidUserInputException.class)
+    public ResponseEntity<ExceptionResponseDTO> handleInvalidInputException(InvalidUserInputException ex) {
+        ExceptionResponseDTO msg = new ExceptionResponseDTO(HttpStatus.BAD_REQUEST, ex.getMessage());
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(msg);
+    }
+
 
 }

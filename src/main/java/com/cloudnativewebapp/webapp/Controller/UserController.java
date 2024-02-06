@@ -3,13 +3,12 @@ package com.cloudnativewebapp.webapp.Controller;
 
 import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
-import com.cloudnativewebapp.webapp.Exception.DatabaseException;
-import com.cloudnativewebapp.webapp.Exception.InvalidEmailAddressException;
-import com.cloudnativewebapp.webapp.Exception.UserAlreadyExistsException;
-import com.cloudnativewebapp.webapp.Exception.UserNotFoundException;
+import com.cloudnativewebapp.webapp.Exception.*;
 import com.cloudnativewebapp.webapp.Service.UserServiceInterface;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -21,14 +20,31 @@ public class UserController {
     @Autowired
     private UserServiceInterface userService;
 
+    @Autowired
+    HttpServletRequest request;
+
+    HttpHeaders header;
+
+    public UserController() {
+        header = new HttpHeaders();
+        header.set("Cache-Control", "no-cache, no-store, must-revalidate;");
+        header.set("Pragma", "no-cache");
+        header.set("X-Content-Type-Options", "nosniff");
+    }
+
     @PostMapping("/v1/user")
-    public ResponseEntity<UserDTO> createUserRequest(@Valid @RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException {
+    public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException {
         UserDTO userDTO = userService.createUser(user);
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
     @GetMapping("/v1/user/self")
-    public ResponseEntity<UserDTO> getUserRequest() throws UserNotFoundException {
+    public ResponseEntity<UserDTO> getUserRequest(@RequestBody(required = false) Object body) throws UserNotFoundException {
+        if(body != null || request.getQueryString() != null) {
+            return ResponseEntity
+                    .status(HttpStatus.BAD_REQUEST)
+                    .headers(header).build();
+        }
         String userName = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         UserDTO getUserFromDB = userService.getUserByUserName(userName);
         return ResponseEntity.status(HttpStatus.OK).body(getUserFromDB);

@@ -17,7 +17,7 @@ jobs:
 
       - name: Install postgresql
         run: |
-          sudo apt install postgresql-16 postgresql-contrib-16
+          sudo apt install -y postgresql postgresql-contrib
 
       - name: Run postgresql server
         run: |

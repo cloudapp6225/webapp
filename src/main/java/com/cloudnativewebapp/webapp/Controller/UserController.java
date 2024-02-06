@@ -37,7 +37,7 @@ public class UserController {
     @PutMapping("/v1/user/self")
     public ResponseEntity<UserDTO> UpdateRequest(@RequestBody User user) throws UserNotFoundException, DatabaseException {
         String userName = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        if(user.getId() != null || (user.getUsername() != null && !userName.equals(user.getUsername()))
+        if(user.getId() != null || user.getUsername() != null
                 || user.getAccount_created() != null || user.getAccount_updated() != null) {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }

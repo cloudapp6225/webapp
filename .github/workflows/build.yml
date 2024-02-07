@@ -22,6 +22,10 @@ jobs:
 
   build_and_test:
     runs-on: ubuntu-latest
+    env:
+      db: ${{ secrets.DB }}
+      db_user: ${{ secrets.DB_USER }}
+      db_pwd: ${{ secrets.DB_PASSWORD }}
 
     needs: install_dependencies
 
@@ -41,9 +45,9 @@ jobs:
 
       - name: Set up database and create user for application
         run: |
-          sudo -u postgres psql -c "CREATE DATABASE app_db;"
-          sudo -u postgres psql -c "CREATE USER web_app with password 'ZLce#E3O0oS!w51@+h@d';"
-          sudo -u postgres psql -c "ALTER USER web_app WITH SUPERUSER;"
+          sudo -u postgres psql -c "CREATE DATABASE ${db};"
+          sudo -u postgres psql -c "CREATE USER ${db_user} with password '${db_pwd}';"
+          sudo -u postgres psql -c "ALTER USER ${db_user} WITH SUPERUSER;"
 
 
       - name: Build and Test Spring boot Application

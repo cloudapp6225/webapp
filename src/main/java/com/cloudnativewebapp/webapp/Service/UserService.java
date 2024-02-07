@@ -26,6 +26,10 @@ public class UserService implements UserServiceInterface{
 
     @Override
     public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException {
+        if(user.getId() != null || user.getAccount_created() != null || user.getAccount_updated() != null) {
+            throw new InvalidUserInputException("Invalid fields provided");
+        }
+
         if(user.getUsername() == null
                 || user.getFirst_name() == null
                 || user.getLast_name() == null

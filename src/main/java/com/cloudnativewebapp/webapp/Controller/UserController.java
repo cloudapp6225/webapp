@@ -59,7 +59,7 @@ public class UserController {
         }
 
         UserDTO getUserFromDB = userService.updateUser(user, userName);
-        return ResponseEntity.status(HttpStatus.OK).body(getUserFromDB);
+        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
     }
 
     @PatchMapping("/v1/user/self")

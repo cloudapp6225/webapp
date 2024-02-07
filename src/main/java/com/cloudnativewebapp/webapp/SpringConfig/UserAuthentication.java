@@ -21,7 +21,7 @@ public class UserAuthentication implements AuthenticationProvider {
     private UserDetailsService customUserDetailsService;
 
     @Override
-    public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+    public Authentication authenticate(Authentication authentication) throws AuthenticationException, BadCredentialsException {
         String userName = String.valueOf(authentication.getPrincipal());
         String password = String.valueOf(authentication.getCredentials());
 
@@ -32,7 +32,7 @@ public class UserAuthentication implements AuthenticationProvider {
             }
         }
 
-        throw new BadCredentialsException("Bad Credentials");
+        throw new BadCredentialsException("Bad User Credentials");
     }
 
     @Override

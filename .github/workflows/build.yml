@@ -35,6 +35,10 @@ jobs:
           java-version: '17'
           distribution: 'adopt'
 
+      - name: Run postgresql server
+        run: |
+          sudo service postgresql start
+
       - name: Set up database and create user for application
         run: |
           sudo -u postgres psql -c "CREATE DATABASE app_db;"

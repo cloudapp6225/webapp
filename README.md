@@ -50,7 +50,6 @@
     account_created: string($date-time)
     account_updated: string($date-time)
 }
-
 ```
 ### Testing
 
@@ -67,7 +66,6 @@ Create a new User
   "password": "skdjfhskdfjhg",
   "username": "jane.doe@example.com"
 }
-
 ```
 ### Authenticated Endpoints
 ### `GET http://localhost:8080/v1/user/self`
@@ -77,7 +75,7 @@ Get a user by passing username and password in basic authentication header.
 Update user details by providing authentication headers.
 
 
-### License
+# License
 
 MIT License
 

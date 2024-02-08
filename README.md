@@ -75,7 +75,7 @@ Get a user by passing username and password in basic authentication header.
 Update user details by providing authentication headers.
 
 
-# License
+## License
 
 MIT License
 

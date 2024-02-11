@@ -2,7 +2,7 @@ package com.cloudnativewebapp.webapp.Service;
 
 import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
-import com.cloudnativewebapp.webapp.Exception.UserNotFoundException;
+import com.cloudnativewebapp.webapp.Exception.*;
 import com.cloudnativewebapp.webapp.Repository.UserRepository;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,30 +19,28 @@ import static org.junit.jupiter.api.Assertions.*;
 @SpringBootTest
 class UserServiceTest {
 
-    @MockBean
+    @Autowired
     private UserRepository userRepository;
 
     @Autowired
     private UserService userService;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws InvalidEmailAddressException, InvalidUserInputException, UserAlreadyExistsException, DatabaseException {
         User userBuilder = User.builder()
                         .first_name("joe")
                         .last_name("doe")
                         .password("XXXXXX")
-                        .username("joe.doe@gmail.com")
-                        .account_updated(String.valueOf(LocalDateTime.now()))
-                        .account_created(String.valueOf(LocalDateTime.now()))
+                        .username("jie.doe@gmail.com")
                         .build();
-        Mockito.when(userRepository.findByUsername("joe.doe@gmail.com")).thenReturn(userBuilder);
+//        Mockito.when(userRepository.findByUsername("joe.doe@gmail.com")).thenReturn(userBuilder);
+        userService.createUser(userBuilder);
     }
 
     @Test
     void createUser() throws UserNotFoundException {
-        String userName = "joe.doe@gmail.com";
+        String userName = "jie.doe@gmail.com";
         UserDTO userDTO = userService.getUserByUserName(userName);
         assertEquals(userDTO.getUsername(), userName);
-
     }
 }

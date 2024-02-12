@@ -1,4 +1,4 @@
-package com.cloudnativewebapp.webapp.RestAssured;
+package com.cloudnativewebapp.webapp.IntegrationTests;
 
 import com.cloudnativewebapp.webapp.WebAppApplication;
 import io.restassured.http.ContentType;
@@ -17,7 +17,7 @@ import static org.hamcrest.Matchers.*;
 
 @SpringBootTest
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-public class IntegrationTests {
+public class WebappTests {
 
     @BeforeAll
     static void setUp() {

@@ -1,6 +1,6 @@
 package com.cloudnativewebapp.webapp.Service;
 
-import org.springframework.context.annotation.Bean;
+import io.github.cdimascio.dotenv.Dotenv;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Component;
@@ -9,9 +9,10 @@ import org.springframework.stereotype.Component;
 public class DatabaseService {
     public void createDatabase() {
         // BootStrap database on startup
+        Dotenv dotenv = Dotenv.configure().load();
         String dataSourceURL = "jdbc:postgresql://localhost:5432/postgres";
-        String username = "web_app";
-        String password = "ZLce#E3O0oS!w51@+h@d";
+        String username = dotenv.get("DB_USER");
+        String password = dotenv.get("DB_PASSWORD");
 
         DriverManagerDataSource dataSource = new DriverManagerDataSource();
         dataSource.setDriverClassName("org.postgresql.Driver");

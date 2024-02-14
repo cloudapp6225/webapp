@@ -50,8 +50,12 @@ jobs:
           sudo -u postgres psql -c "ALTER USER ${DB_USER} WITH SUPERUSER;"
 
 
-      - name: Build and Test Spring boot Application
+      - name: Build and compile code
         run: |
           pg_isready
           mvn -version
-          mvn clean install
+          mvn compile
+
+      - name: Run Integration and unit Tests
+        run: |
+          mvn clean verify

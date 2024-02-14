@@ -45,7 +45,7 @@ jobs:
 
       - name: Set up database and create user for application
         run: |
-#          sudo -u postgres psql -c "CREATE DATABASE ${DB};"
+          sudo -u postgres psql -c "CREATE DATABASE ${DB};"
           sudo -u postgres psql -c "CREATE USER ${DB_USER} with password '${DB_PASSWORD}';"
           sudo -u postgres psql -c "ALTER USER ${DB_USER} WITH SUPERUSER;"
 

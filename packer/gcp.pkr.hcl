@@ -7,8 +7,14 @@ packer {
   }
 }
 
-variable "project_id" {}
-variable "zone" {}
+variable "project_id" {
+  type = string
+  default = "dev-packer"
+}
+variable "zone" {
+  type = string
+  default = "us-east1-b"
+}
 
 source "googlecompute" "centOS-image" {
   project_id              = var.project_id
@@ -24,7 +30,7 @@ source "googlecompute" "centOS-image" {
 build {
   sources = ["sources.googlecompute.centOS-image"]
   provisioner "shell" {
-    script = "gmi-script.sh"
+    script = "packer/gmi-script.sh"
   }
 }
 

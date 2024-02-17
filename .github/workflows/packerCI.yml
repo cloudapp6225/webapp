@@ -27,5 +27,6 @@ jobs:
       - name: Validate packer
         run: |
           packer fmt -check ./packer/.
-          packer validate ./packer/. -var 'project_id=dev-packer' -var 'zone=us-east1-b' gcp.pkr.hcl
+          cd packer
+          packer validate gcp.pkr.hcl
 

@@ -1,0 +1,27 @@
+name: Packer test for CI flow
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  packer_ci:
+    name: packer ci check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Install packer
+        run: |
+          wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update && sudo apt install packer
+
+      - name: Validate packer
+        run: |
+          packer fmt
+          packer validate -var 'project_id=dev-packer' -var 'zone=us-east1-b' gcp.pkr.hcl
+

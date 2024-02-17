@@ -30,5 +30,6 @@ jobs:
 
       - name: check packer
         run: |
-          packer fmt -check ./packer/.
+          cd packer
+          packer fmt -check gcp.pkr.hcl
 

@@ -20,8 +20,12 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
           sudo apt update && sudo apt install packer
 
+      - name: Initilize packer
+        run: |
+          packer init ./packer/.
+
       - name: Validate packer
         run: |
-          packer fmt
-          packer validate -var 'project_id=dev-packer' -var 'zone=us-east1-b' gcp.pkr.hcl
+          packer fmt -check ./packer/.
+          packer validate ./packer/. -var 'project_id=dev-packer' -var 'zone=us-east1-b' gcp.pkr.hcl
 

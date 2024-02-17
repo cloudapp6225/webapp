@@ -24,10 +24,11 @@ jobs:
         run: |
           packer init ./packer/.
 
-      - name: check packer
-        run: formatted=$(packer fmt -check ./Packer/.)
-
       - name: Validate packer
         run: |
           packer validate ./packer/.
+
+      - name: check packer
+        run: |
+          packer fmt -check ./packer/.
 

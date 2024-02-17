@@ -27,6 +27,5 @@ jobs:
       - name: Validate packer
         run: |
           packer fmt -check ./packer/.
-          cd packer
-          packer validate gcp.pkr.hcl
+          packer validate ./packer/.
 

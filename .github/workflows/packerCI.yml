@@ -24,11 +24,12 @@ jobs:
         run: |
           packer init ./packer/.
 
+      - name: check packer
+        run: |
+          packer fmt ./packer/.
+
       - name: Validate packer
         run: |
           packer validate ./packer/.
 
-      - name: check packer
-        run: |
-          packer fmt ./packer/.
 

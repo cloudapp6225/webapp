@@ -8,11 +8,11 @@ packer {
 }
 
 variable "project_id" {
-  type = string
+  type    = string
   default = "dev-packer"
 }
 variable "zone" {
-  type = string
+  type    = string
   default = "us-east1-b"
 }
 

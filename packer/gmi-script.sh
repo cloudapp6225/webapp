@@ -20,3 +20,4 @@ echo 'export PATH=${M2_HOME}/bin:${PATH}' >> ~/.bashrc
 source ~/.bashrc
 mvn -version
 java -version
+

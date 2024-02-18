@@ -1,5 +1,5 @@
 #!/bin/bash
-sudo dnf upgrade -y
+#sudo dnf upgrade -y
 #sudo dnf install vim -y
 #sudo dnf install unzip -y
 sudo dnf install postgresql-server postgresql-contrib -y

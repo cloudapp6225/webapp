@@ -44,7 +44,7 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
-    needs: install_dependencies
+    needs: packer_dependencies
 
     steps:
       - name: Checkout Repository

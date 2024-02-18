@@ -1,0 +1,80 @@
+name: Packer build image_centOSStream8 YAML
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  install_dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install Maven
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y maven
+
+      - name: Install postgresql
+        run: |
+          sudo apt install -y postgresql postgresql-contrib
+
+      - name: Install packer
+        run: |
+          wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
+          echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
+          sudo apt update && sudo apt install packer
+
+
+  build_packer_image:
+    runs-on: ubuntu-latest
+    env:
+      DB: ${{ secrets.DB }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+
+    needs: install_dependencies
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v2
+
+      - name: Set up Java
+        uses: actions/setup-java@v2
+        with:
+          java-version: '17'
+          distribution: 'adopt'
+
+      - name: Run postgresql server
+        run: |
+          sudo service postgresql start
+
+      - name: Set up database and create user for application
+        run: |
+          sudo -u postgres psql -c "CREATE DATABASE ${DB};"
+          sudo -u postgres psql -c "CREATE USER ${DB_USER} with password '${DB_PASSWORD}';"
+          sudo -u postgres psql -c "ALTER USER ${DB_USER} WITH SUPERUSER;"
+
+
+      - name: Status of postgres
+        run: |
+          pg_isready
+
+      - name: Run Integration and unit Tests
+        run: |
+          mvn clean verify
+
+      - name: Initialize packer
+        run: |
+          packer init ./packer/.
+
+      - name: check packer
+        run: |
+          packer fmt ./packer/.
+
+      - name: Validate packer
+        run: |
+          packer validate ./packer/.
+
+      - name: Google cloud setup
+        uses:

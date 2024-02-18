@@ -24,6 +24,17 @@ jobs:
           wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
           sudo apt update && sudo apt install packer
+          
+            - name: Google cloud setup
+        uses: 'google-github-actions/auth@v2'
+        with:
+          credentials_json: '{{ secrets.DEV_GCP_CREDENTIALS }}'
+
+      - name: 'Set up Cloud SDK'
+        uses: 'google-github-actions/setup-gcloud@v2'
+
+      - name: 'Use gcloud CLI'
+        run: 'gcloud info'
 
 
   build_packer_image:
@@ -76,5 +87,6 @@ jobs:
         run: |
           packer validate ./packer/.
 
-      - name: Google cloud setup
-        uses:
+      - name: Build packer
+        run: |
+          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_env=./.env' -var 'source_systemd=./systemd/webapp.service' ./packer/.

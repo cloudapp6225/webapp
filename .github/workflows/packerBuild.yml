@@ -80,8 +80,10 @@ jobs:
       - name: check packer
         run: |
           packer fmt ./packer/.
-          pwd
-          ls -al
+          touch .env
+          echo ‘DB_USER="${DB_USER}"’ >> ./.env
+          echo ‘DB_PASSWORD="${DB_PASSWORD}"’ >> ./.env
+          cat .env
 
       - name: Validate packer
         run: |

@@ -85,7 +85,7 @@ jobs:
 
       - name: Validate packer
         run: |
-          packer validate ./packer/.
+          packer validate -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_env=./.env' -var 'source_systemd=./systemd/webapp.service' ./packer/.
 
       - name: Build packer
         run: |

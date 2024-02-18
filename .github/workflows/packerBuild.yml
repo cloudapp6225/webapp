@@ -6,7 +6,7 @@ on:
       - main
 
 jobs:
-  install_dependencies:
+  packer_dependencies:
     runs-on: ubuntu-latest
 
     steps:

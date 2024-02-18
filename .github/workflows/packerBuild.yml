@@ -8,6 +8,10 @@ on:
 jobs:
   packer_dependencies:
     runs-on: ubuntu-latest
+    env:
+      DB: ${{ secrets.DB }}
+      DB_USER: ${{ secrets.DB_USER }}
+      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 
     steps:
       - name: Install Maven
@@ -36,16 +40,6 @@ jobs:
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
 
-  build_packer_image:
-    runs-on: ubuntu-latest
-    env:
-      DB: ${{ secrets.DB }}
-      DB_USER: ${{ secrets.DB_USER }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
-    needs: packer_dependencies
-
-    steps:
       - name: Checkout Repository
         uses: actions/checkout@v2
 

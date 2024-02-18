@@ -24,18 +24,17 @@ jobs:
           wget -O- https://apt.releases.hashicorp.com/gpg | sudo gpg --dearmor -o /usr/share/keyrings/hashicorp-archive-keyring.gpg
           echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
           sudo apt update && sudo apt install packer
-          
-            - name: Google cloud setup
+
+      - name: Google cloud setup
         uses: 'google-github-actions/auth@v2'
         with:
-          credentials_json: '{{ secrets.DEV_GCP_CREDENTIALS }}'
+          credentials_json: '${{ secrets.DEV_GCP_CREDENTIALS }}'
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v2'
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
-
 
   build_packer_image:
     runs-on: ubuntu-latest
@@ -65,7 +64,6 @@ jobs:
           sudo -u postgres psql -c "CREATE DATABASE ${DB};"
           sudo -u postgres psql -c "CREATE USER ${DB_USER} with password '${DB_PASSWORD}';"
           sudo -u postgres psql -c "ALTER USER ${DB_USER} WITH SUPERUSER;"
-
 
       - name: Status of postgres
         run: |

@@ -29,17 +29,6 @@ jobs:
           echo "deb [signed-by=/usr/share/keyrings/hashicorp-archive-keyring.gpg] https://apt.releases.hashicorp.com $(lsb_release -cs) main" | sudo tee /etc/apt/sources.list.d/hashicorp.list
           sudo apt update && sudo apt install packer
 
-      - name: Google cloud setup
-        uses: 'google-github-actions/auth@v2'
-        with:
-          credentials_json: ${{ secrets.DEV_GCP_CREDENTIALS }}
-
-      - name: 'Set up Cloud SDK'
-        uses: google-github-actions/setup-gcloud@v2
-
-      - name: 'Use gcloud CLI'
-        run: 'gcloud info'
-
       - name: Checkout Repository
         uses: actions/checkout@v2
 
@@ -73,11 +62,15 @@ jobs:
 
       - name: check packer
         run: |
-          packer fmt ./packer/.
           touch .env
-          echo ‘DB_USER="${DB_USER}"’ >> ./.env
-          echo ‘DB_PASSWORD="${DB_PASSWORD}"’ >> ./.env
+          echo "DB_USER=${DB_USER}" >> .env
+          echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
           cat .env
+
+      - name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v0.4.0
+        with:
+          credentials_json: ${{ secrets.DEV_GCP_CREDENTIALS }}
 
       - name: Validate packer
         run: |

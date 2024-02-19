@@ -73,7 +73,7 @@ Get a user by passing username and password in basic authentication header.
 
 ### `PUT http://localhost:8080/v1/user/self`
 Update user details by providing authentication headers.
-
+svdd
 
 ## License
 

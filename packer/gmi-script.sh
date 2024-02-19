@@ -7,7 +7,7 @@ sudo postgresql-setup initdb
 sudo systemctl start postgresql
 sudo systemctl enable postgresql
 sudo -u postgres psql -c "CREATE DATABASE app_db;"
-sudo -u postgres psql -c "CREATE USER web_app with PASSWORD 'ZLce#E3O0oSw51@+h@d';"
+sudo -u postgres psql -c "CREATE USER web_app with PASSWORD 'vin123';"
 sudo -u postgres psql -c "ALTER USER web_app WITH SUPERUSER;"
 sudo sed -i '82 s/ident/md5/' /var/lib/pgsql/data/pg_hba.conf
 sudo systemctl restart postgresql

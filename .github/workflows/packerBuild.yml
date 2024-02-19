@@ -35,7 +35,7 @@ jobs:
           credentials_json: '${{ secrets.DEV_GCP_CREDENTIALS }}'
 
       - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v2'
+        uses: google-github-actions/setup-gcloud@v2
 
       - name: 'Use gcloud CLI'
         run: 'gcloud info'
@@ -85,4 +85,4 @@ jobs:
 
       - name: Build packer
         run: |
-          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_env=./.env' -var 'source_systemd=./systemd/webapp.service' ./packer/.
+          sudo packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_env=./.env' -var 'source_systemd=./systemd/webapp.service' ./packer/.

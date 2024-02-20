@@ -16,7 +16,7 @@
    ```bash
    git clone https://github.com/cloudapp6225/webapp.git
 
-2. Install postgresql
+2. Install postgresql server
 
     ```bash
     sudo apt install -y postgresql postgresql-contrib

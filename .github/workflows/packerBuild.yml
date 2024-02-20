@@ -1,4 +1,4 @@
-name: build_centOS_Stream_8_image
+name: build_pkr_image
 
 on:
   pull_request:

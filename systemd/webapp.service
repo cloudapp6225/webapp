@@ -1,14 +1,14 @@
 [Unit]
 Description=Start Webapp!
-ConditionPathExists=/opt/csye6225/.env
+ConditionPathExists=/opt/webapp/.env
 After=network.target
 
 [Service]
 Type=simple
 User=csye6225
 Group=csye6225
-WorkingDirectory=/opt/csye6225
-ExecStart=/bin/bash -c "/usr/bin/java -jar /opt/csye6225/web-app-0.0.1-SNAPSHOT.jar"
+WorkingDirectory=/opt/webapp
+ExecStart=/bin/bash -c "/usr/bin/java -jar /opt/webapp/web-app-0.0.1-SNAPSHOT.jar"
 Restart=always
 RestartSec=3
 

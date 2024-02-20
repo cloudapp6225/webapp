@@ -61,7 +61,11 @@ jobs:
         run: |
           packer init ./packer/.
 
-      - name: check packer
+      - name: Format packer
+        run: |
+          packer fmt ./packer/.
+
+      - name: Transfer env file
         run: |
           touch .env
           echo "DB_USER=${DB_USER}" >> .env

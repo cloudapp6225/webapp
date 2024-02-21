@@ -47,7 +47,7 @@ build {
     source      = "${var.source_jar}"
     destination = "/tmp/web-app-0.0.1-SNAPSHOT.jar"
   }
-  provisioner "file" { # we pass .env file while creating instance form terraform
+  provisioner "file" { # we pass .env file from github actions
     source      = "${var.source_env}"
     destination = "/tmp/.env"
   }

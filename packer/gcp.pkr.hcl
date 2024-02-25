@@ -47,10 +47,10 @@ build {
     source      = "${var.source_jar}"
     destination = "/tmp/web-app-0.0.1-SNAPSHOT.jar"
   }
-#  provisioner "file" { # we pass .env file from github actions
-#    source      = "${var.source_env}"
-#    destination = "/tmp/.env"
-#  }
+  #  provisioner "file" { # we pass .env file from github actions
+  #    source      = "${var.source_env}"
+  #    destination = "/tmp/.env"
+  #  }
   provisioner "file" {
     source      = "${var.source_systemd}"
     destination = "/tmp/webapp.service"

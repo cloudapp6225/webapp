@@ -32,5 +32,5 @@ sudo chmod 750 /opt/webapp/web-app-0.0.1-SNAPSHOT.jar
 #sudo chmod 750 /opt/webapp/.env
 sudo systemctl daemon-reload
 sudo systemctl enable webapp.service
-#sudo systemctl start webapp.service
+sudo systemctl start webapp.service
 

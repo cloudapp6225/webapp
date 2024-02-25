@@ -24,6 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DB: ${{ secrets.DB }}
+      HOST: ${{ secrets.HOST }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
 

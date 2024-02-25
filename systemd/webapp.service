@@ -1,6 +1,6 @@
 [Unit]
 Description=Start Webapp!
-ConditionPathExists=/opt/webapp/.env
+ConditionPathExists=/opt/webapp/application.properties
 After=network.target
 
 [Service]

@@ -16,10 +16,16 @@ sudo alternatives --set java /usr/lib/jvm/java-17-openjdk-17.0.6.0.9-0.3.ea.el8.
 #echo 'export PATH=${M2_HOME}/bin:${PATH}' >> ~/.bashrc
 #source ~/.bashrc
 #mvn -version
+curl -sSO https://dl.google.com/cloudagents/add-google-cloud-ops-agent-repo.sh
+sudo bash add-google-cloud-ops-agent-repo.sh --also-install
+rpm --query --queryformat '%{NAME} %{VERSION} %{RELEASE} %{ARCH}\n' google-cloud-ops-agent
+touch /tmp/webapp.log
+sudo mv /tmp/webapp.log /var/log/
+sudo chown csye6225:csye6225 /var/log/webapp.log
+sudo chmod 750 /var/log/webapp.log
 java -version
 sudo chown csye6225:csye6225 /opt/webapp/web-app-0.0.1-SNAPSHOT.jar
 sudo chmod 750 /opt/webapp/web-app-0.0.1-SNAPSHOT.jar
 sudo systemctl daemon-reload
 sudo systemctl enable webapp.service
 sudo systemctl start webapp.service
-

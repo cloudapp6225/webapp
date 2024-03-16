@@ -4,6 +4,8 @@ import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
 import com.cloudnativewebapp.webapp.Exception.*;
 import com.cloudnativewebapp.webapp.Repository.UserRepository;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
 import org.hibernate.exception.DataException;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +13,8 @@ import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 import static com.cloudnativewebapp.webapp.SpringConfig.AppConfig.passwordEncoder;
@@ -23,9 +27,11 @@ public class UserService implements UserServiceInterface{
 
     @Autowired
     private ModelMapper modelMapper;
-
+    private Logger logger = LogManager.getLogger(UserService.class);
+    Map<String, Object> message;
     @Override
     public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException {
+        message = new HashMap<>();
         if(user.getId() != null || user.getAccount_created() != null || user.getAccount_updated() != null) {
             throw new InvalidUserInputException("Invalid fields provided");
         }
@@ -55,6 +61,12 @@ public class UserService implements UserServiceInterface{
                 .build();
            try {
                User savedUser = userRepository.save(newUser);
+               message.put("username", savedUser.getUsername());
+               message.put("first_name", savedUser.getFirst_name());
+               message.put("last_name", savedUser.getLast_name());
+               message.put("account_created", savedUser.getAccount_created());
+               message.put("account_updated", savedUser.getAccount_updated());
+               logger.info(message);
                return modelMapper.map(savedUser, UserDTO.class);
            }
            catch (Exception e) {

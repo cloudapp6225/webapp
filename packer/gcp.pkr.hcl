@@ -30,6 +30,10 @@ variable "source_env" {
   type    = string
   default = ""
 }
+variable "source_opsconfig" {
+  type    = string
+  default = ""
+}
 source "googlecompute" "centOS-image" {
   project_id              = var.project_id
   zone                    = var.zone
@@ -55,6 +59,10 @@ build {
   provisioner "file" {
     source      = "${var.source_systemd}"
     destination = "/tmp/webapp.service"
+  }
+  provisioner "file" {
+    source      = "${var.source_opsconfig}"
+    destination = "/tmp/config.yaml"
   }
   provisioner "shell" {
     script = "packer/gmi-script.sh"

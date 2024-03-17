@@ -39,6 +39,7 @@ source "googlecompute" "centOS-image" {
   tags                    = ["packer-image-centos8"]
   network                 = "default"
   image_guest_os_features = ["PRIVATE"]
+  machine_type            = "e2-standard-8"
 }
 
 build {

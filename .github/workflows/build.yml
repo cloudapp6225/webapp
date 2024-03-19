@@ -60,5 +60,4 @@ jobs:
       - name: Run Integration and unit Tests
         run: |
           sudo touch /var/log/webapp.log
-          sudo chmod 754 /var/log/webapp.log
-          mvn clean verify
+          sudo mvn clean install

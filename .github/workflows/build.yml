@@ -12,6 +12,8 @@ jobs:
     steps:
       - name: Install Maven
         run: |
+          sudo touch /var/log/webapp.log
+          sudo chmod 666 /var/log/webapp.log
           sudo apt-get update
           sudo apt-get install -y maven
 
@@ -59,5 +61,4 @@ jobs:
 
       - name: Run Integration and unit Tests
         run: |
-          sudo touch /var/log/webapp.log
-          sudo mvn clean install
+          mvn clean verify

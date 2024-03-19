@@ -4,10 +4,10 @@ import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
 import com.cloudnativewebapp.webapp.Exception.*;
 import com.cloudnativewebapp.webapp.Repository.UserRepository;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 import org.hibernate.exception.DataException;
 import org.modelmapper.ModelMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
@@ -27,7 +27,8 @@ public class UserService implements UserServiceInterface{
 
     @Autowired
     private ModelMapper modelMapper;
-    private Logger logger = LogManager.getLogger(UserService.class);
+    private Logger logger = LoggerFactory.getLogger(UserService.class);
+
     Map<String, Object> message;
     @Override
     public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException {
@@ -61,12 +62,16 @@ public class UserService implements UserServiceInterface{
                 .build();
            try {
                User savedUser = userRepository.save(newUser);
-               message.put("username", savedUser.getUsername());
-               message.put("first_name", savedUser.getFirst_name());
-               message.put("last_name", savedUser.getLast_name());
-               message.put("account_created", savedUser.getAccount_created());
-               message.put("account_updated", savedUser.getAccount_updated());
-               logger.info(message);
+//               message.put("username", savedUser.getUsername());
+//               message.put("first_name", savedUser.getFirst_name());
+//               message.put("last_name", savedUser.getLast_name());
+//               message.put("account_created", savedUser.getAccount_created());
+//               message.put("account_updated", savedUser.getAccount_updated());
+               logger.info(savedUser.getUsername());
+               logger.info("Logging INFO with Logback");
+               logger.error("Logging ERROR with Logback");
+               logger.warn("Logging WARN with Logback");
+               logger.trace("Logging at trace level");
                return modelMapper.map(savedUser, UserDTO.class);
            }
            catch (Exception e) {

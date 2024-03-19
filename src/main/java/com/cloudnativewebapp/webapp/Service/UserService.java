@@ -68,7 +68,7 @@ public class UserService implements UserServiceInterface{
 //               message.put("account_created", savedUser.getAccount_created());
 //               message.put("account_updated", savedUser.getAccount_updated());
                logger.info(savedUser.getUsername());
-               logger.info("Logging INFO with Logback");
+               logger.debug("Logging DEBUG with Logback");
                logger.error("Logging ERROR with Logback");
                logger.warn("Logging WARN with Logback");
                logger.trace("Logging at trace level");

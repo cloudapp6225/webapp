@@ -43,7 +43,7 @@ jobs:
       - name: Run postgresql server
         run: |
           sudo touch /var/log/webapp.log
-          sudo chmod 666 /var/log/webapp.log
+          sudo chmod o+rw /var/log/webapp.log
           sudo service postgresql start
 
       - name: Set up database and create user for application

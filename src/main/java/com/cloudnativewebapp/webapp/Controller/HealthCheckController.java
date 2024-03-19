@@ -55,7 +55,7 @@ public class HealthCheckController {
 
     @PutMapping("/healthz")
     public ResponseEntity<Void> putDBHealth() {
-        logger.warn("request is not allowed");
+        logger.warn("Put request is not allowed");
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .headers(header).build();
@@ -63,7 +63,7 @@ public class HealthCheckController {
 
     @PostMapping("/healthz")
     public ResponseEntity<Void> postDBHealth() {
-        logger.warn("request is not allowed");
+        logger.warn("Post request is not allowed");
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .headers(header).build();
@@ -71,7 +71,7 @@ public class HealthCheckController {
 
     @DeleteMapping("/healthz")
     public ResponseEntity<Void> deleteDBHealth() {
-        logger.warn("request is not allowed");
+        logger.warn("Delete request is not allowed");
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .headers(header).build();
@@ -79,7 +79,7 @@ public class HealthCheckController {
 
     @PatchMapping("/healthz")
     public ResponseEntity<Void> patchDBMapping() {
-        logger.warn("request is not allowed");
+        logger.warn("Patch request is not allowed");
         return ResponseEntity
                 .status(HttpStatus.METHOD_NOT_ALLOWED)
                 .headers(header).build();

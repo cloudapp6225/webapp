@@ -39,13 +39,13 @@ public class UserService implements UserServiceInterface{
         if(user.getUsername() == null
                 || user.getFirst_name() == null
                 || user.getLast_name() == null
-                || user.getPassword() == null) {
+                || user.getPassword() == null || user.getPassword().isEmpty()) {
             logger.error("The fields username, first_name, last_name, password are required");
             throw new InvalidUserInputException("The fields username, first_name, last_name, password are required");
         }
 
         if(userRepository.findByUsername(user.getUsername()) != null) {
-            logger.error("User already exists in database");
+            logger.error("User "+ user.getUsername()+ "already exists in database");
             throw new UserAlreadyExistsException("User already exists");
         }
 

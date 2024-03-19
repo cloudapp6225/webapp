@@ -29,11 +29,10 @@ public class UserService implements UserServiceInterface{
     private ModelMapper modelMapper;
     private Logger logger = LoggerFactory.getLogger(UserService.class);
 
-    Map<String, Object> message;
     @Override
     public UserDTO createUser(User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException {
-        message = new HashMap<>();
         if(user.getId() != null || user.getAccount_created() != null || user.getAccount_updated() != null) {
+            logger.error("Invalid user fields are passed");
             throw new InvalidUserInputException("Invalid fields provided");
         }
 
@@ -41,14 +40,17 @@ public class UserService implements UserServiceInterface{
                 || user.getFirst_name() == null
                 || user.getLast_name() == null
                 || user.getPassword() == null) {
+            logger.error("The fields username, first_name, last_name, password are required");
             throw new InvalidUserInputException("The fields username, first_name, last_name, password are required");
         }
 
         if(userRepository.findByUsername(user.getUsername()) != null) {
+            logger.error("User already exists in database");
             throw new UserAlreadyExistsException("User already exists");
         }
 
         if(!isValidEmail(user.getUsername())) {
+            logger.error("Invalid Email Address provided");
             throw new InvalidEmailAddressException("Invalid Email Address");
         }
 
@@ -62,19 +64,10 @@ public class UserService implements UserServiceInterface{
                 .build();
            try {
                User savedUser = userRepository.save(newUser);
-//               message.put("username", savedUser.getUsername());
-//               message.put("first_name", savedUser.getFirst_name());
-//               message.put("last_name", savedUser.getLast_name());
-//               message.put("account_created", savedUser.getAccount_created());
-//               message.put("account_updated", savedUser.getAccount_updated());
-               logger.info(savedUser.getUsername());
-               logger.debug("Logging DEBUG with Logback");
-               logger.error("Logging ERROR with Logback");
-               logger.warn("Logging WARN with Logback");
-               logger.trace("Logging at trace level");
                return modelMapper.map(savedUser, UserDTO.class);
            }
            catch (Exception e) {
+               logger.error("Unable to save user" + e.getMessage());
                throw new DatabaseException(e.getMessage());
            }
     }
@@ -83,9 +76,11 @@ public class UserService implements UserServiceInterface{
     public UserDTO getUser(String userId) throws UserNotFoundException {
         Optional<User> user = userRepository.findById(userId);
         if(!user.isPresent()) {
+            logger.error("User does not exist in database");
             throw new UserNotFoundException("User does not exist in database");
         }
         UserDTO userDTO = modelMapper.map(user, UserDTO.class);
+        logger.info(String.valueOf(userDTO));
         return userDTO;
     }
 
@@ -96,6 +91,7 @@ public class UserService implements UserServiceInterface{
             return modelMapper.map(user, UserDTO.class);
         }
         else {
+            logger.error("The requested " + userName + " does not exit in database");
             throw new UserNotFoundException("User does not exist in database");
         }
     }
@@ -117,10 +113,12 @@ public class UserService implements UserServiceInterface{
                 return modelMapper.map(updatedUser, UserDTO.class);
             }
             catch (Exception e) {
+                logger.error("Could not update user" + e.getMessage());
                 throw new DatabaseException(e.getMessage());
             }
         }
         else {
+            logger.error("The user " + userName + " does not exist in database");
             throw new UserNotFoundException("The User does not exist in database");
         }
     }

@@ -1,5 +1,7 @@
 package com.cloudnativewebapp.webapp.SpringConfig;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -20,6 +22,8 @@ public class UserAuthentication implements AuthenticationProvider {
     @Autowired
     private UserDetailsService customUserDetailsService;
 
+    Logger logger = LoggerFactory.getLogger(UserAuthentication.class);
+
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException, BadCredentialsException {
         String userName = String.valueOf(authentication.getPrincipal());
@@ -30,8 +34,8 @@ public class UserAuthentication implements AuthenticationProvider {
             if(passwordEncoder().matches(password, userDetails.getPassword())) {
                 return new UsernamePasswordAuthenticationToken(userName, password, new ArrayList<>());
             }
+            logger.error("Wrong credentials passed from user " + userDetails.getUsername());
         }
-
         throw new BadCredentialsException("Bad User Credentials");
     }
 

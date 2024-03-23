@@ -4,7 +4,9 @@ package com.cloudnativewebapp.webapp.Controller;
 import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
 import com.cloudnativewebapp.webapp.Exception.*;
+import com.cloudnativewebapp.webapp.PubSub.PublishWithCustomAttributes;
 import com.cloudnativewebapp.webapp.Service.UserServiceInterface;
+import com.cloudnativewebapp.webapp.Service.VerificationServiceInterface;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.slf4j.Logger;
@@ -23,21 +25,27 @@ public class UserController {
     private UserServiceInterface userService;
 
     @Autowired
+    private VerificationServiceInterface verificationServiceInterface;
+
+    @Autowired
     HttpServletRequest request;
     HttpHeaders header;
-
     Logger logger = LoggerFactory.getLogger(UserController.class);
+
+    PublishWithCustomAttributes publishWithCustomAttributes= null;
 
     public UserController() {
         header = new HttpHeaders();
+        publishWithCustomAttributes = new PublishWithCustomAttributes();
         header.set("Cache-Control", "no-cache, no-store, must-revalidate;");
         header.set("Pragma", "no-cache");
         header.set("X-Content-Type-Options", "nosniff");
     }
 
     @PostMapping("/v1/user")
-    public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException {
+    public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException, InterruptedException {
         UserDTO userDTO = userService.createUser(user);
+        publishWithCustomAttributes.publishData("dev-gcp-project-1", "test-topic", userDTO);
         logger.info(String.valueOf(userDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
@@ -51,9 +59,15 @@ public class UserController {
                     .headers(header).build();
         }
         String userName = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
-        UserDTO getUserFromDB = userService.getUserByUserName(userName);
-        logger.info(String.valueOf(getUserFromDB));
-        return ResponseEntity.status(HttpStatus.OK).body(getUserFromDB);
+        String verifiedStatus = verificationServiceInterface.getVerificationStatus(userName);
+        if(verifiedStatus.equals("success")) {
+            UserDTO getUserFromDB = userService.getUserByUserName(userName);
+            logger.info(String.valueOf(getUserFromDB));
+            return ResponseEntity.status(HttpStatus.OK).body(getUserFromDB);
+        }
+        else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @PutMapping("/v1/user/self")

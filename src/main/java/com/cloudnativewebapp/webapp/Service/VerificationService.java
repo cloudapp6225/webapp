@@ -26,4 +26,18 @@ public class VerificationService implements VerificationServiceInterface {
         EmailVerification emailVerification = verificationRepository.findByEmail(email);
         return emailVerification.getStatus();
     }
+
+
+    @Override
+    public EmailVerification saveEmaillink(String email, String userId) {
+        EmailVerification emailVerification = EmailVerification.builder()
+                .email(email)
+                .userId(userId)
+                .sent_timestamp(String.valueOf(LocalDateTime.now()))
+                .verified_timestamp(null)
+                .status("sent").build();
+
+        verificationRepository.save(emailVerification);
+        return emailVerification;
+    }
 }

@@ -46,6 +46,7 @@ public class UserController {
     public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException, InterruptedException {
         UserDTO userDTO = userService.createUser(user);
         publishWithCustomAttributes.publishData("dev-gcp-project-1", "test-topic", userDTO);
+        verificationServiceInterface.saveEmaillink(userDTO.getUsername(), userDTO.getId());
         logger.info(String.valueOf(userDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }

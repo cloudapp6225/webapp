@@ -5,6 +5,7 @@ import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
 import com.cloudnativewebapp.webapp.Exception.*;
 import com.cloudnativewebapp.webapp.PubSub.PublishWithCustomAttributes;
+import com.cloudnativewebapp.webapp.SMTP.MailgunSMTP;
 import com.cloudnativewebapp.webapp.Service.UserServiceInterface;
 import com.cloudnativewebapp.webapp.Service.VerificationServiceInterface;
 import jakarta.servlet.http.HttpServletRequest;

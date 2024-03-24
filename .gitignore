@@ -18,6 +18,7 @@ webapp.log
 .project
 # JDT-specific (Eclipse Java Development Tools)
 .classpath
+src/main/java/com/cloudnativewebapp/webapp/SMTP
 
 ### IntelliJ IDEA ###
 .idea

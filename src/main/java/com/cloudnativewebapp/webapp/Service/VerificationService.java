@@ -52,6 +52,7 @@ public class VerificationService implements VerificationServiceInterface {
                 .userId(userId)
                 .sent_timestamp(formattedTimestamp)
                 .verified_timestamp(null)
+                .link(null)
                 .status("Triggered").build();
 
         verificationRepository.save(emailVerification);

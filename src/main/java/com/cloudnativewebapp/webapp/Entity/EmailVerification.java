@@ -28,4 +28,6 @@ public class EmailVerification {
     String verified_timestamp;
 
     String status;
+
+    String link;
 }

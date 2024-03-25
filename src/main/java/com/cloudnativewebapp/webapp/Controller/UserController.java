@@ -5,7 +5,6 @@ import com.cloudnativewebapp.webapp.DTO.UserDTO;
 import com.cloudnativewebapp.webapp.Entity.User;
 import com.cloudnativewebapp.webapp.Exception.*;
 import com.cloudnativewebapp.webapp.PubSub.PublishWithCustomAttributes;
-import com.cloudnativewebapp.webapp.SMTP.MailgunSMTP;
 import com.cloudnativewebapp.webapp.Service.UserServiceInterface;
 import com.cloudnativewebapp.webapp.Service.VerificationServiceInterface;
 import jakarta.servlet.http.HttpServletRequest;
@@ -46,7 +45,7 @@ public class UserController {
     @PostMapping("/v1/user")
     public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException, InterruptedException {
         UserDTO userDTO = userService.createUser(user);
-        publishWithCustomAttributes.publishData("dev-gcp-project-1", "test-topic", userDTO);
+        publishWithCustomAttributes.publishData("dev-gcp-project-1", "new-topic", userDTO);
         verificationServiceInterface.saveEmaillink(userDTO.getUsername(), userDTO.getId());
         logger.info(String.valueOf(userDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);

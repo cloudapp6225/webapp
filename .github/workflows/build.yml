@@ -27,6 +27,7 @@ jobs:
       HOST: ${{ secrets.HOST }}
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
+      TOPIC_NAME: ${{ secrets.TOPIC_NAME }}
 
     needs: install_dependencies
 

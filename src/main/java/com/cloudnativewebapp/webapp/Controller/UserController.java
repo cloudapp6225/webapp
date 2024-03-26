@@ -52,7 +52,7 @@ public class UserController {
 
     @PostMapping("/v1/user")
     public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException, InterruptedException {
-        UserDTOq userDTO = userService.createUser(user);
+        UserDTO userDTO = userService.createUser(user);
         System.out.println(topic_name);
         if(environment.equals("prod")) {
             publishWithCustomAttributes.publishData("dev-gcp-project-1", topic_name, userDTO);

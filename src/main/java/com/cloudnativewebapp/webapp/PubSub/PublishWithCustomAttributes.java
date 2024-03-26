@@ -12,6 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 
@@ -23,12 +24,14 @@ public class PublishWithCustomAttributes {
         Publisher publisher = null;
 
         try {
+            String uuid = userDTO.getId();
+            String username = userDTO.getUsername();
+            String msgJson = "{\"uuid\":\"" + uuid + "\", \"username\":\"" + username + "\"}";
             publisher = Publisher.newBuilder(topicName).build();
             String msg = "New User Created form webapp";
-            ByteString data = ByteString.copyFromUtf8(msg);
+            ByteString data = ByteString.copyFromUtf8(msgJson);
             PubsubMessage pubsubMessage = PubsubMessage.newBuilder()
                             .setData(data)
-                            .putAllAttributes(ImmutableMap.of("username", userDTO.getUsername(), "userId", userDTO.getId()))
                             .build();
 
             ApiFuture<String> msgIdFuture = publisher.publish(pubsubMessage);

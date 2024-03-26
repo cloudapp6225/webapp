@@ -12,6 +12,7 @@ import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -34,6 +35,9 @@ public class UserController {
 
     PublishWithCustomAttributes publishWithCustomAttributes= null;
 
+    @Value("${topic-name}")
+    String topic_name;
+
     public UserController() {
         header = new HttpHeaders();
         publishWithCustomAttributes = new PublishWithCustomAttributes();
@@ -45,7 +49,8 @@ public class UserController {
     @PostMapping("/v1/user")
     public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException, InterruptedException {
         UserDTO userDTO = userService.createUser(user);
-        publishWithCustomAttributes.publishData("dev-gcp-project-1", "new-topic", userDTO);
+        System.out.println(topic_name);
+        publishWithCustomAttributes.publishData("dev-gcp-project-1", topic_name, userDTO);
         verificationServiceInterface.saveEmaillink(userDTO.getUsername(), userDTO.getId());
         logger.info(String.valueOf(userDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);

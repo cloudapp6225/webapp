@@ -78,6 +78,7 @@ public class UserController {
             return ResponseEntity.status(HttpStatus.OK).body(getUserFromDB);
         }
         else {
+            logger.error("User email " + userName + " is not authorized");
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
         }
     }
@@ -90,10 +91,16 @@ public class UserController {
             logger.error("Required fields are not passed to create the user");
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(null);
         }
-
-        UserDTO getUserFromDB = userService.updateUser(user, userName);
-        logger.info("User details updated successfully " + getUserFromDB.getUsername());
-        return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        String verifiedStatus = verificationServiceInterface.getVerificationStatus(userName);
+        if(verifiedStatus.equals("success")) {
+            UserDTO getUserFromDB = userService.updateUser(user, userName);
+            logger.info("User details updated successfully " + getUserFromDB.getUsername());
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        }
+        else {
+            logger.error("User email " + userName + " is not authorized");
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+        }
     }
 
     @PatchMapping("/v1/user/self")

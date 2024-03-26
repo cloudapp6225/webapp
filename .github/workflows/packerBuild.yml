@@ -18,6 +18,7 @@ jobs:
       DB_USER: ${{ secrets.DB_USER }}
       DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
       TOPIC_NAME: ${{ secrets.TOPIC_NAME }}
+      ENVIRONMENT: ${{ secrets.ENVIRONMENT }}
 
     steps:
       - name: Install Maven

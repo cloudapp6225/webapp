@@ -38,6 +38,10 @@ public class UserController {
     @Value("${topic-name}")
     String topic_name;
 
+    @Value("${environment}")
+    String environment;
+
+
     public UserController() {
         header = new HttpHeaders();
         publishWithCustomAttributes = new PublishWithCustomAttributes();
@@ -48,9 +52,11 @@ public class UserController {
 
     @PostMapping("/v1/user")
     public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException, InterruptedException {
-        UserDTO userDTO = userService.createUser(user);
+        UserDTOq userDTO = userService.createUser(user);
         System.out.println(topic_name);
-        publishWithCustomAttributes.publishData("dev-gcp-project-1", topic_name, userDTO);
+        if(environment.equals("prod")) {
+            publishWithCustomAttributes.publishData("dev-gcp-project-1", topic_name, userDTO);
+        }
         verificationServiceInterface.saveEmaillink(userDTO.getUsername(), userDTO.getId());
         logger.info(String.valueOf(userDTO));
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);

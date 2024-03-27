@@ -79,7 +79,7 @@ public class UserController {
         }
         else {
             logger.error("User email " + userName + " is not authorized");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }
 
@@ -99,7 +99,7 @@ public class UserController {
         }
         else {
             logger.error("User email " + userName + " is not authorized");
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(null);
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(null);
         }
     }
 

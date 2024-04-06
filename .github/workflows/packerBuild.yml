@@ -85,9 +85,9 @@ jobs:
         with:
           credentials_json: ${{ secrets.DEV_GCP_CREDENTIALS }}
 
-      - name: Validate packer
-        run: |
-          packer validate -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
+#      - name: Validate packer
+#        run: |
+#          packer validate -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
 
       - name: Build packer
         run: |

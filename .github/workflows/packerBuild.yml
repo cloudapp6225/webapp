@@ -10,7 +10,7 @@ on:
 jobs:
   packer_dependencies:
     name: build_pkr_image
-    if: github.event.pull_request.merged == true
+#    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     env:
       DB: ${{ secrets.DB }}
@@ -91,4 +91,12 @@ jobs:
 
       - name: Build packer
         run: |
-          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
+#          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
+
+      - name: template creation and instance manager update
+        run: |
+          output=$(gcloud compute images list --filter="name~^packer-centos8-" --sort-by=~creationTimestamp --limit=1)
+          image_name=$(echo "$output" | awk 'NR>1 {print $1}')
+          random_string=$(LC_ALL=C tr -dc 'a-z0-9' < /dev/urandom | head -c 6)
+          template_name="webapp-instance-template-$random_string"
+          gcloud compute instance-templates create "$template_name" --project=dev-gcp-project-1 --machine-type=e2-medium --network-interface=network-tier=PREMIUM,subnet=webapp --metadata=startup-script=\#\!/bin/bash$'\n'sudo\ truncate\ -s\ 0\ /opt/webapp/application.properties$'\n'sudo\ echo\ \"spring.datasource.driver-class-name=org.postgresql.Driver\"\ \>\>\ /opt/webapp/application.properties$'\n'sudo\ echo\ \"spring.datasource.url=jdbc:postgresql://10.216.0.5:5432/webapp\"\ \>\>\ /opt/webapp/application.properties$'\n'sudo\ echo\ \"spring.datasource.username=webapp\"\ \>\>\ /opt/webapp/application.properties$'\n'sudo\ echo\ \"spring.datasource.password=Mx@-hEBL\"\ \>\>\ /opt/webapp/application.properties$'\n'sudo\ echo\ \"spring.jpa.properties.hibernate.dialect\ =\ org.hibernate.dialect.PostgreSQLDialect\"\ \>\>\ /opt/webapp/application.properties$'\n'sudo\ echo\ \"spring.jpa.hibernate.ddl-auto=update\"\ \>\>\ /opt/webapp/application.properties$'\n'sudo\ echo\ \"topic-name=verify_email\"\ \>\>\ /opt/webapp/application.properties$'\n'sudo\ echo\ \"environment=prod\"\ \>\>\ /opt/webapp/application.properties$'\n' --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=webapp-service-account@dev-gcp-project-1.iam.gserviceaccount.com --scopes=https://www.googleapis.com/auth/pubsub,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write --region=us-east1 --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image="$image_name",mode=rw,size=100,type=pd-standard --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any

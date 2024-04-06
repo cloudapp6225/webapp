@@ -105,9 +105,9 @@ jobs:
       - name: Wait until instance group refresh completes
         run: |
           while true; do
-              manager_status=$(gcloud compute instance-groups managed describe INSTANCE_GROUP_NAME --region=REGION --format="value[terminator=''](status)")
-              version_target=$(echo "$manager_status" | grep -oP "versionTarget={'isReached': \K[^;]+")
-              if [ "$version_target" == "True" ]; then
+              manager_status=$(gcloud compute instance-groups managed describe webapp-manager --region=us-east1 --format="value[terminator=''](status)")
+              version_target=$(echo "$manager_status" | awk -F "versionTarget={'|'}" '{print $2}')
+              if [ "$version_target" == "isReached': True" ]; then
                   echo "Version target is reached."
                   exit 0
               else

@@ -65,20 +65,20 @@ jobs:
         run: |
           mvn clean verify
 
-      - name: Initialize packer
-        run: |
-          packer init ./packer/.
-
-      - name: Format packer
-        run: |
-          packer fmt ./packer/.
-
-      - name: Transfer env file
-        run: |
-          touch .env
-          echo "DB_USER=${DB_USER}" >> .env
-          echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
-          cat .env
+#      - name: Initialize packer
+#        run: |
+#          packer init ./packer/.
+#
+#      - name: Format packer
+#        run: |
+#          packer fmt ./packer/.
+#
+#      - name: Transfer env file
+#        run: |
+#          touch .env
+#          echo "DB_USER=${DB_USER}" >> .env
+#          echo "DB_PASSWORD=${DB_PASSWORD}" >> .env
+#          cat .env
 
       - name: Authenticate to Google Cloud
         uses: google-github-actions/auth@v2

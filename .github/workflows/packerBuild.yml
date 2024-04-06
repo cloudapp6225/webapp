@@ -106,7 +106,8 @@ jobs:
         run: |
           while true; do
               manager_status=$(gcloud compute instance-groups managed describe webapp-manager --region=us-east1 --format="json")
-              version_target=$(echo "$manager_status" | jq -r '.versionTarget.isReached')
+              echo "$manager_status"
+              version_target=$(echo "$manager_status" | grep -o '"isReached": *[a-z]*' | awk -F": " '{print $2}' | tr -d '"')
               echo "$version_target"
               if [ "$version_target" == "true" ]; then
                   echo "Version target is reached."

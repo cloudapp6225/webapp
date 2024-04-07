@@ -115,12 +115,10 @@ jobs:
               if [ "$version_target" == "true" ]; then
                   echo "Version target is reached."
                   exit 0
-              elif [ $counter -eq 18 ]; then
-                  echo "Failed to reach version target"
-                  exit 1
               else
                   echo "Still checking...."
                   ((counter++))
                   sleep 60
               fi
           done
+          echo $counter

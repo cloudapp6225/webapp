@@ -91,9 +91,9 @@ jobs:
         run: |
           packer validate -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
 
-#      - name: Build packer
-#        run: |
-#          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
+      - name: Build packer
+        run: |
+          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
 
       - name: template creation and instance manager update
         run: |
@@ -106,6 +106,7 @@ jobs:
 
       - name: Wait until instance group refresh completes
         run: |
+          counter=0
           while true; do
               manager_status=$(gcloud compute instance-groups managed describe webapp-manager --region=us-east1 --format="json")
               echo "$manager_status"
@@ -114,8 +115,12 @@ jobs:
               if [ "$version_target" == "true" ]; then
                   echo "Version target is reached."
                   exit 0
+              elif [ $counter -eq 18 ]; then
+                  echo "Failed to reach version target"
+                  exit 1
               else
                   echo "Still checking...."
-                  sleep 30
+                  ((counter++))
+                  sleep 60
               fi
           done

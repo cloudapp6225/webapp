@@ -117,7 +117,6 @@ jobs:
                   exit 0
               else
                   echo "Still checking...."
-                  ((counter++))
                   sleep 60
               fi
           done

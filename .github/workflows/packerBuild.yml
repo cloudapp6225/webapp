@@ -4,13 +4,13 @@ on:
   pull_request:
     branches:
       - main
-#    types:
-#      - closed
+    types:
+      - closed
 
 jobs:
   packer_dependencies:
     name: build_pkr_image
-#    if: github.event.pull_request.merged == true
+    if: github.event.pull_request.merged == true
     runs-on: ubuntu-latest
     env:
       DB: ${{ secrets.DB }}
@@ -91,9 +91,9 @@ jobs:
         run: |
           packer validate -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
 
-#      - name: Build packer
-#        run: |
-#          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
+      - name: Build packer
+        run: |
+          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
 
       - name: template creation and instance manager update
         run: |

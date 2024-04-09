@@ -26,7 +26,8 @@ public class PublishWithCustomAttributes {
         try {
             String uuid = userDTO.getId();
             String username = userDTO.getUsername();
-            String msgJson = "{\"uuid\":\"" + uuid + "\", \"username\":\"" + username + "\"}";
+            String link = "https://skynetx.me/v1/verify";
+            String msgJson = "{\"uuid\":\"" + uuid + "\", \"username\":\"" + username + "\", \"emailid\":\"" + link + "\"}";
             publisher = Publisher.newBuilder(topicName).build();
             String msg = "New User Created form webapp";
             ByteString data = ByteString.copyFromUtf8(msgJson);

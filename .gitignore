@@ -25,7 +25,7 @@ src/main/java/com/cloudnativewebapp/webapp/SMTP
 *.iws
 *.iml
 *.ipr
-
+pkroutput.txt
 
 ### VS Code ###
 .vscode/

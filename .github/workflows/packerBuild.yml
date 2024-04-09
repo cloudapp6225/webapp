@@ -93,12 +93,13 @@ jobs:
 
       - name: Build packer
         run: |
-          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/.
+          packer build -var 'project_id=dev-gcp-project-1' -var 'source_jar=./target/web-app-0.0.1-SNAPSHOT.jar' -var 'source_systemd=./systemd/webapp.service' -var 'source_opsconfig=./opsagent/config.yaml' ./packer/. > pkroutput.txt
 
       - name: template creation and instance manager update
         run: |
-          output=$(gcloud compute images list --filter="name~^packer-centos8-" --sort-by=~creationTimestamp --limit=1)
-          image_name=$(echo "$output" | awk 'NR>1 {print $1}')
+          last_line=$(tail -n 1 pkroutput.txt)
+          image_name=$(echo $last_line | awk -F': ' '{print $NF}')
+          echo "$image_name"
           random_string=$(LC_ALL=C tr -dc 'a-z0-9' < /dev/urandom | head -c 6)
           template_name="webapp-instance-template-$random_string"
           gcloud compute instance-templates create "$template_name" --project=dev-gcp-project-1 --machine-type=e2-medium --network-interface=network-tier=PREMIUM,subnet=webapp --metadata=startup-script="${METADATA_GCP}" --maintenance-policy=MIGRATE --provisioning-model=STANDARD --service-account=webapp-service-account@dev-gcp-project-1.iam.gserviceaccount.com --scopes=https://www.googleapis.com/auth/pubsub,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write --region=us-east1 --create-disk=auto-delete=yes,boot=yes,device-name=persistent-disk-0,image="$image_name",kms-key="${KEY_NAME}",mode=rw,size=100,type=pd-standard --no-shielded-secure-boot --shielded-vtpm --shielded-integrity-monitoring --reservation-affinity=any

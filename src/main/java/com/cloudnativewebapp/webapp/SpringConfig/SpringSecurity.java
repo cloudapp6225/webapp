@@ -12,8 +12,8 @@ import org.springframework.security.web.SecurityFilterChain;
 public class SpringSecurity {
     private static final String[] WHITELISTED_URLS = {
             "/healthz",
-            "/v1/user",
-            "/v1/verify/*"
+            "/v2/user",
+            "/v2/verify/*"
     };
 
     @Bean

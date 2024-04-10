@@ -2,7 +2,7 @@
 
 ## Cloud Native Web Application
 
-## Getting Startedx
+## Getting Started
 
 ### Prerequisites
 

@@ -15,7 +15,7 @@ public class VerifyUserController {
     @Autowired
     private VerificationServiceInterface verificationService;
 
-    @GetMapping("/v2/verify/{id}")
+    @GetMapping("/v1/verify/{id}")
     public ResponseEntity<String> verifyUser(@PathVariable String id) {
         String status = verificationService.verfiyEmail(id);
         return ResponseEntity.status(HttpStatus.SC_OK).body(status);

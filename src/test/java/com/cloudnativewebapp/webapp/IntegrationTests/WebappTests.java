@@ -38,7 +38,7 @@ public class WebappTests {
                 .contentType(ContentType.JSON)
                 .body("{\"first_name\": \"Jane\", \"last_name\": \"Doe\", \"password\": \"skdjfhskdfjhg\", \"username\": \"vinay21031998@gmail.com\"}")
                 .when()
-                .post("/v1/user")
+                .post("/v2/user")
                 .then()
                 .statusCode(HttpStatus.CREATED.value());
 
@@ -49,7 +49,7 @@ public class WebappTests {
         given()
                 .auth().basic("vinay21031998@gmail.com", "skdjfhskdfjhg")
                 .when()
-                .get("/v1/user/self")
+                .get("/v2/user/self")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("first_name", equalTo("Jane"))
@@ -66,14 +66,14 @@ public class WebappTests {
                 .auth().basic("vinay21031998@gmail.com", "skdjfhskdfjhg")
                 .body("{\"first_name\": \"vk\", \"last_name\": \"l\", \"password\": \"XXX\"}")
                 .when()
-                .put("/v1/user/self")
+                .put("/v2/user/self")
                 .then()
                 .statusCode(HttpStatus.NO_CONTENT.value());
 
         given()
                 .auth().basic("vinay21031998@gmail.com", "XXX")
                 .when()
-                .get("/v1/user/self")
+                .get("/v2/user/self")
                 .then()
                 .statusCode(HttpStatus.OK.value())
                 .body("first_name", equalTo("vk"))

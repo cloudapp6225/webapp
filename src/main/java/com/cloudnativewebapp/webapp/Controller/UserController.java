@@ -50,7 +50,7 @@ public class UserController {
         header.set("X-Content-Type-Options", "nosniff");
     }
 
-    @PostMapping("/v2/user")
+    @PostMapping("/v1/user")
     public ResponseEntity<UserDTO> createUserRequest(@RequestBody User user) throws UserAlreadyExistsException, DatabaseException, InvalidEmailAddressException, InvalidUserInputException, InterruptedException {
         UserDTO userDTO = userService.createUser(user);
         System.out.println(topic_name);
@@ -62,7 +62,7 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.CREATED).body(userDTO);
     }
 
-    @GetMapping("/v2/user/self")
+    @GetMapping("/v1/user/self")
     public ResponseEntity<UserDTO> getUserRequest(@RequestBody(required = false) Object body) throws UserNotFoundException {
         if(body != null || request.getQueryString() != null) {
             logger.error("Bad request");
@@ -83,7 +83,7 @@ public class UserController {
         }
     }
 
-    @PutMapping("/v2/user/self")
+    @PutMapping("/v1/user/self")
     public ResponseEntity<UserDTO> UpdateRequest(@RequestBody User user) throws UserNotFoundException, DatabaseException {
         String userName = String.valueOf(SecurityContextHolder.getContext().getAuthentication().getPrincipal());
         if(user.getId() != null || user.getUsername() != null
@@ -103,19 +103,19 @@ public class UserController {
         }
     }
 
-    @PatchMapping("/v2/user/self")
+    @PatchMapping("/v1/user/self")
     public ResponseEntity<Void> patchRequest(@RequestBody(required = false) Object body) {
         logger.warn("request is not allowed");
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
-    @DeleteMapping("/v2/user/self")
+    @DeleteMapping("/v1/user/self")
     public ResponseEntity<Void> deleteRequest() {
         logger.warn("request is not allowed");
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
     }
 
-    @RequestMapping(path = "/v2/user/self", method = {RequestMethod.HEAD, RequestMethod.OPTIONS})
+    @RequestMapping(path = "/v1/user/self", method = {RequestMethod.HEAD, RequestMethod.OPTIONS})
     public ResponseEntity<Void> headOptionsMapping() {
         logger.warn("request is not allowed");
         return ResponseEntity.status(HttpStatus.METHOD_NOT_ALLOWED).build();
